@@ -19,7 +19,7 @@ VALUES (1, 'PharmaMaroc', 'contact@pharmamaroc.ma', 'Casablanca, Maroc'),
 
 
 INSERT INTO detail_produit (id, fabricant, pays_origine, composition, dosage,
-                            indication)
+                            indications)
 VALUES (1, 'Sanofi', 'France', 'Amoxicilline trihydratée 500 mg', '500 mg', 'Infections
 ORL et respiratoires'),
        (2, 'Bayer', 'Allemagne', 'Paracétamol 500 mg', '500 mg', 'Douleurs légères à
@@ -40,7 +40,7 @@ VALUES (1, 'Sans ordonnance'),
        (5, 'Importé');
 
 
-INSERT INTO produit (id, nom, description, prix, code_bare, date_expiration,
+INSERT INTO produit (id, nom, description, prix, code_barre, date_expiration,
                      categorie_id, fourniseur_id, detail_produit_id)
 VALUES (1, 'Amoxicilline 500mg', 'Antibiotique à large spectre.', 45.00, 'AMX500-2025',
         '2026-03-10', 1, 1, 1),
