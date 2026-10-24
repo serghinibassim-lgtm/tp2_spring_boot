@@ -1,4 +1,4 @@
-use db_spring_1;
+use db_spring_secur;
 
 INSERT INTO categorie (id, nom, description)
 VALUES (1, 'Antibiotiques', 'Médicaments utilisés pour traiter les infectionsbactériennes.'),

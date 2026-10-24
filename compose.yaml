@@ -1,11 +1,11 @@
 services:
   mariadb:
     image: mariadb:latest
-    container_name: mariadb-spring
+    container_name: mariadb-spring_security
     restart: unless-stopped
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MARIADB_DATABASE: db_spring_1
+      MARIADB_DATABASE: db_spring_secur
       MARIADB_USER: ${DB_USERNAME}
       MARIADB_PASSWORD: ${DB_PASSWORD}
     ports:

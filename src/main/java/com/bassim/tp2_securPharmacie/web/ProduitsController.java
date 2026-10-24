@@ -5,6 +5,8 @@ import com.bassim.tp2_securPharmacie.dtos.FournisseurDto;
 import com.bassim.tp2_securPharmacie.dtos.ProduitDto;
 import com.bassim.tp2_securPharmacie.dtos.TagDto;
 import com.bassim.tp2_securPharmacie.mappers.ProduitMappers;
+import com.bassim.tp2_securPharmacie.models.Categorie;
+import com.bassim.tp2_securPharmacie.models.Fournisseure;
 import com.bassim.tp2_securPharmacie.models.Produit;
 import com.bassim.tp2_securPharmacie.repositories.CatgorieRepository;
 import com.bassim.tp2_securPharmacie.repositories.FournisseurRepository;
@@ -76,6 +78,7 @@ public class ProduitsController {
 
     @GetMapping("/api/categories")
     public List<CategorieDto> listeCategories() {
+
         return catgorieRepository.findAll().stream().map(categorie -> {
             CategorieDto dto = new CategorieDto();
             BeanUtils.copyProperties(categorie, dto);
@@ -83,22 +86,45 @@ public class ProduitsController {
         }).toList();
     }
 
-    @GetMapping("/api/fournisseurs")
-    public List<FournisseurDto> listeFournisseurs() {
-        return fournisseurRepository.findAll().stream().map(fournisseur -> {
-            FournisseurDto dto = new FournisseurDto();
-            BeanUtils.copyProperties(fournisseur, dto);
+        @GetMapping("/api/categories/{id}")
+        public CategorieDto CategoriesByid (@PathVariable Long id){
+
+            Categorie categorie = catgorieRepository.findById(id).orElseThrow(() ->
+                    new RuntimeException("no categorie avec id " + id)
+            );
+            CategorieDto dto = new CategorieDto();
+            BeanUtils.copyProperties(categorie, dto);
             return dto;
-        }).toList();
+
+        }
+
+        @GetMapping("/api/fournisseurs")
+        public List<FournisseurDto> listeFournisseurs () {
+            return fournisseurRepository.findAll().stream().map(fournisseur -> {
+                FournisseurDto dto = new FournisseurDto();
+                BeanUtils.copyProperties(fournisseur, dto);
+                return dto;
+            }).toList();
+        }
+
+    @GetMapping("/api/fournisseurs/{id}")
+    public FournisseurDto FournisseursById (@PathVariable Long id) {
+        Fournisseure fournisseure= fournisseurRepository.findById(id).orElseThrow(()->
+                new RuntimeException("no fournisseur avec id :"+id));
+            FournisseurDto dto = new FournisseurDto();
+            BeanUtils.copyProperties(fournisseure, dto);
+            return dto;
+
     }
 
+
     @GetMapping("/api/tags")
-    public List<TagDto> listeTags() {
-        return tagRepository.findAll().stream().map(tag -> {
-            TagDto dto = new TagDto();
-            BeanUtils.copyProperties(tag, dto);
-            return dto;
-        }).toList();
+        public List<TagDto> listeTags () {
+            return tagRepository.findAll().stream().map(tag -> {
+                TagDto dto = new TagDto();
+                BeanUtils.copyProperties(tag, dto);
+                return dto;
+            }).toList();
+        }
     }
-}
 
