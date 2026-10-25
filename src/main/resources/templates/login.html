@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion · PharmaStock</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="auth-page">
+
+<main class="auth-card">
+    <a class="brand auth-brand" th:href="@{/login}">
+        <span class="brand-logo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7Z"/>
+                <path d="m8.5 8.5 7 7"/>
+            </svg>
+        </span>
+        <span>
+            <span class="brand-name">PharmaStock</span>
+            <span class="brand-sub">Gestion de la pharmacie</span>
+        </span>
+    </a>
+
+    <h1 class="auth-title">Connexion</h1>
+    <p class="auth-sub">Accédez à votre espace selon votre rôle.</p>
+
+    <div class="alert error" th:if="${param.error}" role="alert">
+        Identifiant ou mot de passe incorrect.
+    </div>
+    <div class="alert success" th:if="${param.logout}" role="status">
+        Vous avez été déconnecté avec succès.
+    </div>
+
+    <form class="auth-form" th:action="@{/login}" method="post">
+        <div class="field">
+            <label for="username">Nom d'utilisateur</label>
+            <input id="username" name="username" type="text"
+                   autocomplete="username" required autofocus
+                   placeholder="Ex. : admin">
+        </div>
+
+        <div class="field">
+            <label for="password">Mot de passe</label>
+            <input id="password" name="password" type="password"
+                   autocomplete="current-password" required
+                   placeholder="Votre mot de passe">
+        </div>
+
+        <button class="btn primary btn-block" type="submit">Se connecter</button>
+    </form>
+
+    <details class="demo-accounts">
+        <summary>Comptes de démonstration (base initialisée par l'application)</summary>
+        <div class="demo-grid">
+            <span>Administrateur</span><code>admin / admin123</code>
+            <span>Pharmacien</span><code>pharmacien / pharma123</code>
+            <span>Caissier</span><code>caissier / caissier123</code>
+            <span>Client</span><code>client / client123</code>
+        </div>
+    </details>
+</main>
+
+</body>
+</html>

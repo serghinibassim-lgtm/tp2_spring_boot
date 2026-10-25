@@ -13,6 +13,7 @@ public class ProduitDto {
     BigDecimal prix;
     String codeBarre;
     LocalDate dateExpiration;
+    Integer stock;
     CategorieDto categorie;
     FournisseurDto fournisseur;
     DetailProduitDto detailProduit;

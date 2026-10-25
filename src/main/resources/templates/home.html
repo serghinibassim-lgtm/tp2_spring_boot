@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil · PharmaStock</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/topbar :: topbar('home')}"></header>
+
+<main class="page">
+    <section class="hero">
+        <div>
+            <span class="role-badge" th:classappend="${'role-' + primaryRole}"
+                  th:text="${roleLabel}">Rôle</span>
+            <h1>Bonjour, <span th:text="${username}">utilisateur</span></h1>
+            <p class="lead" th:text="${roleDescription}">
+                Bienvenue dans votre espace pharmacie.
+            </p>
+            <div class="hero-actions">
+                <a class="btn primary" th:href="@{/medicaments}"
+                   th:text="${isAdmin ? 'Gérer les médicaments' :
+                            (isPharmacien ? 'Stocks et ventes' :
+                            (isCaissier ? 'Enregistrer une vente' : 'Voir le catalogue'))}">
+                    Gérer les médicaments
+                </a>
+                <a class="btn ghost" th:if="${isAdmin}" th:href="@{/admin}">
+                    Gérer les utilisateurs
+                </a>
+            </div>
+        </div>
+
+        <aside class="hero-side">
+            <strong>Votre session</strong>
+            <span>Connecté en tant que <b th:text="${username}">utilisateur</b>.</span>
+            <span>
+                Rôle actif :
+                <span class="badge" th:classappend="${'role-' + primaryRole}"
+                      th:text="${primaryRole}">ADMIN</span>
+            </span>
+        </aside>
+    </section>
+
+    <section class="stats" aria-label="Vue d'ensemble">
+        <article class="stat">
+            <div class="stat-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7Z"/>
+                    <path d="m8.5 8.5 7 7"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${produitCount}">0</div>
+                <div class="stat-label">Médicaments</div>
+            </div>
+        </article>
+
+        <article class="stat">
+            <div class="stat-icon blue" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 7 12 3 4 7v10l8 4 8-4Z"/>
+                    <path d="m4 7 8 4 8-4"/>
+                    <path d="M12 21V11"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${availableCount}">0</div>
+                <div class="stat-label">Disponibles</div>
+            </div>
+        </article>
+
+        <article class="stat">
+            <div class="stat-icon warn" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.3 3.8 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z"/>
+                    <path d="M12 9v4"/>
+                    <path d="M12 17h.01"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${lowStockCount}">0</div>
+                <div class="stat-label">Stock faible</div>
+            </div>
+        </article>
+
+        <article class="stat">
+            <div class="stat-icon danger" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18"/>
+                    <path d="M8 6V4h8v2"/>
+                    <path d="m19 6-1 14H6L5 6"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${expiredCount}">0</div>
+                <div class="stat-label">Expirés</div>
+            </div>
+        </article>
+
+        <article class="stat" th:if="${isAdmin}">
+            <div class="stat-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.9"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${userCount}">0</div>
+                <div class="stat-label">Utilisateurs</div>
+            </div>
+        </article>
+    </section>
+
+    <section class="quick-grid" aria-label="Accès rapides">
+        <a class="quick-card" th:href="@{/medicaments}">
+            <span class="quick-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7Z"/>
+                    <path d="m8.5 8.5 7 7"/>
+                </svg>
+            </span>
+            <span>
+                <strong th:text="${isAdmin ? 'Gérer les médicaments' :
+                                  (isPharmacien ? 'Consulter et ajuster les stocks' :
+                                  (isCaissier ? 'Enregistrer une vente' : 'Consulter le catalogue'))}">
+                    Gérer les médicaments
+                </strong>
+                <span th:text="${isAdmin ? 'Créer, modifier et supprimer les médicaments, ajuster les stocks.' :
+                                  (isPharmacien ? 'Mettre à jour les quantités et vendre des médicaments.' :
+                                  (isCaissier ? 'Vendre un médicament et mettre à jour le stock automatiquement.' :
+                                  'Catalogue en lecture seule des médicaments disponibles.'))}">
+                    Catalogue
+                </span>
+            </span>
+        </a>
+
+        <a class="quick-card" th:if="${isAdmin}" th:href="@{/admin}">
+            <span class="quick-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.9"/>
+                </svg>
+            </span>
+            <span>
+                <strong>Gérer les utilisateurs</strong>
+                <span>Créer des comptes, attribuer un rôle et supprimer des utilisateurs.</span>
+            </span>
+        </a>
+
+        <a class="quick-card" th:if="${isAdmin or isPharmacien or isCaissier}"
+           th:href="@{/medicaments}">
+            <span class="quick-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="20" r="1.6"/>
+                    <circle cx="18" cy="20" r="1.6"/>
+                    <path d="M2 3h3l2.6 12.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H6"/>
+                </svg>
+            </span>
+            <span>
+                <strong>Enregistrer une vente</strong>
+                <span>Le stock est décrémenté et la vente est enregistrée automatiquement.</span>
+            </span>
+        </a>
+    </section>
+
+    <section class="card" th:if="${!isClient}">
+        <div class="card-head">
+            <div class="card-title">
+                <h2>Dernières ventes</h2>
+                <p>Les cinq ventes les plus récentes enregistrées dans la pharmacie.</p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="min">
+                <thead>
+                <tr>
+                    <th scope="col">Médicament</th>
+                    <th scope="col">Quantité</th>
+                    <th scope="col">Montant</th>
+                    <th scope="col">Vendeur</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="vente : ${dernieresVentes}">
+                    <td class="cell-title" th:text="${vente.produit != null ? vente.produit.nom : 'Produit supprimé'}">
+                        Doliprane
+                    </td>
+                    <td th:text="${vente.quantite}">1</td>
+                    <td class="price"
+                        th:text="${vente.montant != null ? #numbers.formatDecimal(vente.montant, 1, 2) + ' DH' : '—'}">
+                        25,50 DH
+                    </td>
+                    <td th:text="${vente.vendeur}">caissier</td>
+                    <td class="muted" th:text="${vente.dateVenteFormatted}">24/10/2026 14:00</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(dernieresVentes)}">
+                    <td colspan="5" class="empty">
+                        <strong>Aucune vente enregistrée</strong>
+                        Les ventes apparaîtront ici après la première vente.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card" sec:authorize="hasRole('ADMIN')">
+        <div class="card-head">
+            <div class="card-title">
+                <h2>Droits par rôle</h2>
+                <p>Rappel des permissions appliquées par l'application.</p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="min role-table">
+                <thead>
+                <tr>
+                    <th scope="col">Rôle</th>
+                    <th scope="col">Permissions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><span class="badge role-ADMIN">ADMIN</span></td>
+                    <td>Gérer les utilisateurs, les médicaments et les stocks.</td>
+                </tr>
+                <tr>
+                    <td><span class="badge role-PHARMACIEN">PHARMACIEN</span></td>
+                    <td>Consulter et modifier les stocks, vendre des médicaments.</td>
+                </tr>
+                <tr>
+                    <td><span class="badge role-CAISSIER">CAISSIER</span></td>
+                    <td>Enregistrer les ventes uniquement.</td>
+                </tr>
+                <tr>
+                    <td><span class="badge role-CLIENT">CLIENT</span></td>
+                    <td>Consulter les médicaments disponibles en lecture seule.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="page-footer">
+        <span>PharmaStock · Spring Boot &amp; Thymeleaf</span>
+        <span>Connecté : <b th:text="${username}">utilisateur</b></span>
+    </footer>
+</main>
+
+</body>
+</html>

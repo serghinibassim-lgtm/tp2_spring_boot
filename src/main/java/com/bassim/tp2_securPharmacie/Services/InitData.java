@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -47,12 +48,6 @@ public class InitData implements CommandLineRunner {
             String password,
             RolUser roleName) {
 
-        if (userRepository.findUserByUsername(username).isPresent()) {
-            System.out.println(
-                    "Utilisateur déjà existant : " + username);
-            return;
-        }
-
         Role role = roleRepository.findByRol(roleName)
                 .orElseGet(() -> {
                     Role newRole = new Role();
@@ -60,15 +55,30 @@ public class InitData implements CommandLineRunner {
                     return roleRepository.save(newRole);
                 });
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRoles(Set.of(role));
+        User user = userRepository.findUserByUsername(username).orElse(null);
+
+        if (user == null) {
+            user = new User();
+            user.setUsername(username);
+            System.out.println(
+                    "Utilisateur créé : " + username
+                            + " | rôle : " + roleName);
+        } else {
+            System.out.println(
+                    "Utilisateur déjà existant : " + username);
+        }
+
+        // Comptes de démonstration : on garantit le rôle et le mot de passe
+        // annoncés sur la page de connexion, même si la base existe déjà.
+        user.setRoles(new HashSet<>(Set.of(role)));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(password));
+            System.out.println(
+                    "Mot de passe réinitialisé pour le compte de démonstration : "
+                            + username);
+        }
 
         userRepository.save(user);
-
-        System.out.println(
-                "Utilisateur créé : " + username
-                        + " | rôle : " + roleName);
     }
 }

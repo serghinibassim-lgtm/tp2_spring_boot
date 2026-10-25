@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accès refusé · PharmaStock</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="auth-page">
+
+<main class="auth-card denied-card">
+    <div class="denied-code">403</div>
+    <h1 class="auth-title">Accès refusé</h1>
+    <p class="auth-sub">
+        Votre rôle ne vous permet pas d'accéder à cette page.
+        Contactez un administrateur si vous pensez qu'il s'agit d'une erreur.
+    </p>
+
+    <div class="denied-actions">
+        <a class="btn primary" th:href="@{/}">Retour à l'accueil</a>
+        <a class="btn ghost" th:href="@{/medicaments}">Voir les médicaments</a>
+    </div>
+</main>
+
+</body>
+</html>

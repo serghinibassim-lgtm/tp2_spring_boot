@@ -22,6 +22,7 @@ public class Produit {
     BigDecimal prix;
     String codeBarre;
     LocalDate dateExpiration;
+    Integer stock = 0;
 
     @OneToOne(cascade = CascadeType.ALL)
     DetailProduit detailProduit;

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header th:fragment="topbar(active)" class="topbar">
+    <div class="topbar-inner">
+        <a class="brand" th:href="@{/}">
+            <span class="brand-logo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7Z"/>
+                    <path d="m8.5 8.5 7 7"/>
+                </svg>
+            </span>
+            <span>
+                <span class="brand-name">PharmaStock</span>
+                <span class="brand-sub">Gestion de la pharmacie</span>
+            </span>
+        </a>
+
+        <nav class="nav" aria-label="Navigation principale">
+            <a th:href="@{/}" th:classappend="${active == 'home' ? 'active' : ''}">Accueil</a>
+            <a th:href="@{/medicaments}" th:classappend="${active == 'medicaments' ? 'active' : ''}">Médicaments</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}"
+               th:classappend="${active == 'admin' ? 'active' : ''}">Administration</a>
+        </nav>
+
+        <div class="topbar-right">
+            <span class="user-chip">
+                <span class="user-dot"></span>
+                <span sec:authentication="name">utilisateur</span>
+            </span>
+            <form class="logout-form" th:action="@{/logout}" method="post">
+                <button class="btn ghost sm" type="submit">Déconnexion</button>
+            </form>
+        </div>
+    </div>
+</header>
+</body>
+</html>

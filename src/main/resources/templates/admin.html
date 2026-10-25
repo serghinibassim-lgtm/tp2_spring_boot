@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration · PharmaStock</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/topbar :: topbar('admin')}"></header>
+
+<main class="page">
+    <div class="page-header">
+        <div>
+            <div class="eyebrow">Administration</div>
+            <h1>Utilisateurs et accès</h1>
+            <p class="lead">
+                Créez des comptes, attribuez un rôle et gérez les accès à l'application.
+                Seul un administrateur peut accéder à cette page.
+            </p>
+        </div>
+        <div class="page-actions">
+            <a class="btn primary" th:href="@{/medicaments}">Gérer les médicaments</a>
+        </div>
+    </div>
+
+    <div class="alert success" th:if="${success}" role="status" th:text="${success}">
+        Opération effectuée.
+    </div>
+    <div class="alert error" th:if="${error}" role="alert" th:text="${error}">
+        Une erreur est survenue.
+    </div>
+
+    <section class="stats" aria-label="Statistiques d'administration">
+        <article class="stat">
+            <div class="stat-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.9"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${userCount}">0</div>
+                <div class="stat-label">Utilisateurs</div>
+            </div>
+        </article>
+
+        <article class="stat">
+            <div class="stat-icon blue" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
+                    <path d="m9 12 2 2 4-4"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${adminCount}">0</div>
+                <div class="stat-label">Administrateurs</div>
+            </div>
+        </article>
+
+        <article class="stat">
+            <div class="stat-icon warn" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7Z"/>
+                    <path d="m8.5 8.5 7 7"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${produitCount}">0</div>
+                <div class="stat-label">Médicaments</div>
+            </div>
+        </article>
+
+        <article class="stat">
+            <div class="stat-icon danger" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="20" r="1.6"/>
+                    <circle cx="18" cy="20" r="1.6"/>
+                    <path d="M2 3h3l2.6 12.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H6"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" th:text="${ventesJour}">0</div>
+                <div class="stat-label">Ventes aujourd'hui</div>
+            </div>
+        </article>
+    </section>
+
+    <div class="split">
+        <section class="card form-card">
+            <div class="card-head" style="padding:0 0 16px; border-bottom:0;">
+                <div class="card-title">
+                    <h2>Créer un utilisateur</h2>
+                    <p>Le mot de passe sera chiffré avec BCrypt.</p>
+                </div>
+            </div>
+
+            <form th:action="@{/admin/users}" method="post">
+                <div class="form-grid" style="grid-template-columns:1fr;">
+                    <div class="field">
+                        <label for="newUsername">Nom d'utilisateur <span class="req">*</span></label>
+                        <input id="newUsername" name="username" type="text"
+                               minlength="3" maxlength="80" required autocomplete="off"
+                               placeholder="Ex. : pharmacien2">
+                    </div>
+
+                    <div class="field">
+                        <label for="newPassword">Mot de passe <span class="req">*</span></label>
+                        <input id="newPassword" name="password" type="password"
+                               minlength="6" maxlength="120" required
+                               autocomplete="new-password"
+                               placeholder="Au moins 6 caractères">
+                    </div>
+
+                    <div class="field">
+                        <label for="newRole">Rôle <span class="req">*</span></label>
+                        <select id="newRole" name="role" required>
+                            <option th:each="role : ${roles}"
+                                    th:value="${role}"
+                                    th:text="${role}">ADMIN</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn primary btn-block" type="submit">
+                        Créer le compte
+                    </button>
+                </div>
+            </form>
+
+            <p class="hint" style="margin-top:16px;">
+                Vous ne pouvez pas modifier votre propre rôle ni supprimer votre propre compte.
+                Le dernier administrateur ne peut pas être retiré.
+            </p>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <div class="card-title">
+                    <h2>Comptes existants</h2>
+                    <p>Le changement de rôle prend effet à la prochaine connexion.</p>
+                </div>
+                <span class="badge gray" th:text="${userCount} + ' compte(s)'">0 compte(s)</span>
+            </div>
+
+            <div class="table-wrap">
+                <table class="wide">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Utilisateur</th>
+                        <th scope="col">Rôle actuel</th>
+                        <th scope="col">Changer le rôle / supprimer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td class="muted" th:text="${user.id}">1</td>
+                        <td>
+                            <div class="cell-title" th:text="${user.username}">admin</div>
+                            <div class="cell-meta" th:if="${user.username == username}">
+                                Compte courant
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge" th:each="role : ${user.roles}"
+                                  th:classappend="${'role-' + role.rol}"
+                                  th:text="${role.rol}">ADMIN</span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <form class="inline-form"
+                                      th:action="@{/admin/users/{id}/role(id=${user.id})}"
+                                      method="post">
+                                    <select name="role" aria-label="Nouveau rôle"
+                                            th:disabled="${user.username == username}">
+                                        <option th:each="role : ${roles}"
+                                                th:value="${role}"
+                                                th:text="${role}"
+                                                th:selected="${not #lists.isEmpty(user.roles)
+                                                              and user.roles[0].rol == role}">
+                                            ADMIN
+                                        </option>
+                                    </select>
+                                    <button class="btn ghost sm" type="submit"
+                                            th:disabled="${user.username == username}">
+                                        Appliquer
+                                    </button>
+                                </form>
+
+                                <form class="inline-form"
+                                      th:action="@{/admin/users/{id}/delete(id=${user.id})}"
+                                      method="post"
+                                      onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                                    <button class="btn danger sm" type="submit"
+                                            th:disabled="${user.username == username}">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(users)}">
+                        <td colspan="4" class="empty">
+                            <strong>Aucun utilisateur</strong>
+                            Créez le premier compte avec le formulaire.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <footer class="page-footer">
+        <span>PharmaStock · Administration</span>
+        <span>Réservé au rôle ADMIN</span>
+    </footer>
+</main>
+
+</body>
+</html>

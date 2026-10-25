@@ -1,1 +1,11 @@
+com/bassim/tp2_securPharmacie/dtos/StockUpdateRequest.class
+com/bassim/tp2_securPharmacie/web/GlobalControllerAdvice.class
+com/bassim/tp2_securPharmacie/repositories/VenteRepository.class
+com/bassim/tp2_securPharmacie/web/LoginController.class
+com/bassim/tp2_securPharmacie/web/VentesController.class
+com/bassim/tp2_securPharmacie/dtos/VenteDto.class
 com/bassim/tp2_securPharmacie/web/MedicamentsController.class
+com/bassim/tp2_securPharmacie/web/AdminController.class
+com/bassim/tp2_securPharmacie/dtos/VenteRequest.class
+com/bassim/tp2_securPharmacie/Services/VenteService.class
+com/bassim/tp2_securPharmacie/models/Vente.class

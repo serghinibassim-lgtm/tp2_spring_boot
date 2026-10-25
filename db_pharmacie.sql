@@ -41,17 +41,17 @@ VALUES (1, 'Sans ordonnance'),
 
 
 INSERT INTO produit (id, nom, description, prix, code_barre, date_expiration,
-                     categorie_id, fourniseur_id, detail_produit_id)
+                     stock, categorie_id, fourniseur_id, detail_produit_id)
 VALUES (1, 'Amoxicilline 500mg', 'Antibiotique à large spectre.', 45.00, 'AMX500-2025',
-        '2026-03-10', 1, 1, 1),
+        '2026-03-10', 120, 1, 1, 1),
        (2, 'Doliprane 500mg', 'Antalgique et antipyrétique.', 25.50, 'DLP500-2025',
-        '2025-11-01', 2, 2, 2),
+        '2025-11-01', 8, 2, 2, 2),
        (3, 'Vitamine C 1000mg', 'Complément pour renforcer les défenses.', 30.00,
-        'VITC1000-2025', '2026-06-15', 3, 3, 3),
+        'VITC1000-2025', '2026-06-15', 3, 3, 3, 3),
        (4, 'Bétadine Solution 10%', 'Désinfectant pour usage externe.', 18.00,
-        'BETADINE10-2025', '2027-01-30', 4, 4, 4),
+        'BETADINE10-2025', '2027-01-30', 0, 4, 4, 4),
        (5, 'Nurofen 400mg', 'Soulage la douleur et la fièvre.', 42.00, 'NURO400-2025',
-        '2026-02-20', 2, 3, 5);
+        '2026-02-20', 45, 2, 3, 5);
 
 
 INSERT INTO produit_tag (produit_id, tag_id) VALUES
